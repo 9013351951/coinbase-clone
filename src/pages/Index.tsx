@@ -1,8 +1,11 @@
 import PromoBanner from "@/components/PromoBanner";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import PromoFeatureCards from "@/components/PromoFeatureCards";
 import CryptoTable from "@/components/CryptoTable";
-import FeatureCards from "@/components/FeatureCards";
+import AdvancedTradeSection from "@/components/AdvancedTradeSection";
+import ProductShowcase from "@/components/ProductShowcase";
+import BottomCards from "@/components/BottomCards";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 
@@ -13,8 +16,11 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <PromoFeatureCards />
         <CryptoTable />
-        <FeatureCards />
+        <AdvancedTradeSection />
+        <ProductShowcase />
+        <BottomCards />
         <CTASection />
       </main>
       <Footer />
