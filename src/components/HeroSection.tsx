@@ -10,18 +10,21 @@ const HeroSection = () => {
   return (
     <section className="max-w-[1440px] mx-auto px-6 py-12 lg:py-20">
       <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-        {/* Phone mockup */}
+        {/* Phone mockup with blue gradient background */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="flex-1 flex justify-center"
         >
-          <img
-            src={heroPhone}
-            alt="Coinbase trading app showing portfolio with crypto, stocks, and derivatives"
-            className="w-full max-w-[520px] rounded-2xl"
-          />
+          <div className="relative w-full max-w-[520px]">
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-primary/5 rounded-3xl -m-4" />
+            <img
+              src={heroPhone}
+              alt="Coinbase trading app showing portfolio with crypto, stocks, and derivatives"
+              className="relative w-full rounded-2xl"
+            />
+          </div>
         </motion.div>
 
         {/* Text content */}
@@ -31,14 +34,14 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="flex-1 max-w-xl"
         >
-          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold leading-tight tracking-tight text-foreground">
+          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-tight tracking-tight text-foreground">
             Trade anything, anytime, anywhere.
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">
-            Trade crypto, stocks, and more on a platform you can trust.
+            Trade crypto, stocks,¹ and more on a platform you can trust.
           </p>
           <p className="mt-3 text-base text-muted-foreground">
-            Sign up and get up to $2,000 in crypto.
+            Sign up and get up to $2,000 in crypto.²
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -57,7 +60,7 @@ const HeroSection = () => {
       </div>
 
       <p className="mt-10 text-xs text-muted-foreground max-w-4xl">
-        Securities offered by Coinbase Capital Markets (member SIPC, FINRA). Listed futures and swaps are offered via Coinbase Financial Markets ("CFM"), a NFA member firm. Crypto offered by Coinbase Inc.
+        Securities offered by Coinbase Capital Markets (member SIPC, FINRA). Listed futures and swaps are offered via Coinbase Financial Markets ("CFM"), a NFA member firm. Crypto offered by Coinbase Inc. Stocks rollout has begun; coming soon to all U.S. users.
       </p>
     </section>
   );
