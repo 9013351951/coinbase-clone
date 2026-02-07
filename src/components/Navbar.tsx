@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, Menu, X, Globe, ChevronDown } from "lucide-react";
+import { Search, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type DropdownItem = { label: string; desc?: string };
@@ -54,7 +54,9 @@ const navLinks = Object.keys(navDropdowns);
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -66,10 +68,19 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const handleMouseEnter = (link: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setActiveDropdown(link);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
+  };
+
   return (
     <nav className="border-b border-border bg-background sticky top-0 z-50">
       <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between h-16">
-        {/* Logo */}
+        {/* Logo + Links */}
         <div className="flex items-center gap-8" ref={dropdownRef}>
           <a href="#" className="flex items-center">
             <svg width="28" height="28" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,38 +89,39 @@ const Navbar = () => {
             </svg>
           </a>
 
-          {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-0.5">
+          {/* Desktop links — no chevrons */}
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <div key={link} className="relative">
+              <div
+                key={link}
+                className="relative"
+                onMouseEnter={() => handleMouseEnter(link)}
+                onMouseLeave={handleMouseLeave}
+              >
                 <button
-                  onClick={() => setActiveDropdown(activeDropdown === link ? null : link)}
-                  onMouseEnter={() => setActiveDropdown(link)}
-                  className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg inline-flex items-center gap-1 ${
+                  className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
                     activeDropdown === link ? "text-primary" : "text-foreground hover:text-primary"
                   }`}
                 >
                   {link}
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeDropdown === link ? "rotate-180" : ""}`} />
                 </button>
 
                 {activeDropdown === link && (
-                  <div
-                    onMouseLeave={() => setActiveDropdown(null)}
-                    className="absolute top-full left-0 mt-1 w-72 bg-card border border-border rounded-xl shadow-lg p-2 animate-fade-in z-50"
-                  >
-                    {navDropdowns[link].map((item) => (
-                      <a
-                        key={item.label}
-                        href="#"
-                        className="block px-3 py-2.5 rounded-lg hover:bg-accent transition-colors"
-                      >
-                        <p className="text-sm font-medium text-foreground">{item.label}</p>
-                        {item.desc && (
-                          <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
-                        )}
-                      </a>
-                    ))}
+                  <div className="absolute top-full left-0 mt-0 pt-2">
+                    <div className="w-72 bg-card border border-border rounded-xl shadow-lg p-2 z-50">
+                      {navDropdowns[link].map((item) => (
+                        <a
+                          key={item.label}
+                          href="#"
+                          className="block px-3 py-2.5 rounded-lg hover:bg-accent transition-colors"
+                        >
+                          <p className="text-sm font-medium text-foreground">{item.label}</p>
+                          {item.desc && (
+                            <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
+                          )}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -148,13 +160,12 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <div key={link}>
               <button
-                onClick={() => setActiveDropdown(activeDropdown === link ? null : link)}
+                onClick={() => setMobileExpanded(mobileExpanded === link ? null : link)}
                 className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium text-foreground hover:bg-accent rounded-lg"
               >
                 {link}
-                <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === link ? "rotate-180" : ""}`} />
               </button>
-              {activeDropdown === link && (
+              {mobileExpanded === link && (
                 <div className="pl-4 pb-2 space-y-0.5">
                   {navDropdowns[link].map((item) => (
                     <a
