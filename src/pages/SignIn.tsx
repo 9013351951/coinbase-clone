@@ -11,10 +11,10 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [verifyCode, setVerifyCode] = useState("");
 
-  const inputClass = "w-full h-12 px-4 rounded-lg border border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white placeholder:text-[hsl(0,0%,40%)] focus:outline-none focus:ring-2 focus:ring-primary text-sm";
-  const labelClass = "block text-sm font-medium text-[hsl(0,0%,85%)] mb-1.5";
-  const btnClass = "w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-colors";
-  const btnDisabledClass = "w-full h-12 rounded-full bg-primary/30 text-primary-foreground/50 font-semibold text-sm cursor-not-allowed";
+  const inputClass = "w-full h-12 px-4 rounded-lg border border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white placeholder:text-[hsl(0,0%,40%)] focus:outline-none focus:ring-2 focus:ring-primary text-[15px]";
+  const labelClass = "block text-[13px] font-medium text-[hsl(0,0%,70%)] mb-1.5";
+  const btnClass = "w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-[15px] transition-colors";
+  const btnDisabledClass = "w-full h-12 rounded-full bg-[hsl(0,0%,18%)] text-[hsl(0,0%,40%)] font-semibold text-[15px] cursor-not-allowed";
 
   const handleEmailContinue = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +26,27 @@ const SignIn = () => {
     if (password.trim()) setStep("verify");
   };
 
+  /* ── Verify your identity ── */
   if (step === "verify") {
     return (
       <AuthLayout>
-        <h1 className="text-2xl font-bold text-white mb-2">Verify your identity</h1>
-        <p className="text-sm text-[hsl(0,0%,55%)] mb-6">
-          Enter the 2-step verification code sent to your authenticator app.
+        {/* Back button */}
+        <button
+          onClick={() => setStep("password")}
+          className="flex items-center gap-1.5 text-[hsl(0,0%,55%)] hover:text-white text-sm mb-6 -ml-1 transition-colors"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          Back
+        </button>
+
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-full bg-[hsl(221,100%,50%)] flex items-center justify-center">
+            <KeyRound className="w-5 h-5 text-white" />
+          </div>
+          <h1 className="text-[22px] font-bold text-white leading-tight">Verify your identity</h1>
+        </div>
+        <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6 leading-relaxed">
+          Enter the 2-step verification code from your authenticator app.
         </p>
         <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
           <div>
@@ -41,27 +56,42 @@ const SignIn = () => {
               inputMode="numeric"
               maxLength={7}
               value={verifyCode}
-              onChange={(e) => setVerifyCode(e.target.value)}
-              placeholder="Enter your code"
-              className={inputClass}
+              onChange={(e) => setVerifyCode(e.target.value.replace(/[^0-9]/g, ""))}
+              placeholder="000 000"
+              className={`${inputClass} tracking-[0.15em] text-center text-lg font-medium`}
+              autoFocus
             />
           </div>
-          <button type="submit" className={btnDisabledClass} disabled>
+          <button
+            type="submit"
+            className={verifyCode.length >= 6 ? btnClass : btnDisabledClass}
+            disabled={verifyCode.length < 6}
+          >
             Verify
           </button>
-          <div className="text-center">
-            <a href="#" className="text-sm text-primary hover:underline">Try another way</a>
+          <div className="text-center pt-1">
+            <a href="#" className="text-[13px] text-primary hover:underline">Try another way</a>
           </div>
         </form>
       </AuthLayout>
     );
   }
 
+  /* ── Password step ── */
   if (step === "password") {
     return (
       <AuthLayout>
-        <h1 className="text-2xl font-bold text-white mb-1">Enter your password</h1>
-        <p className="text-sm text-[hsl(0,0%,55%)] mb-6">{email}</p>
+        {/* Back button */}
+        <button
+          onClick={() => setStep("email")}
+          className="flex items-center gap-1.5 text-[hsl(0,0%,55%)] hover:text-white text-sm mb-6 -ml-1 transition-colors"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          Back
+        </button>
+
+        <h1 className="text-[22px] font-bold text-white mb-1 leading-tight">Enter your password</h1>
+        <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6">{email}</p>
         <form onSubmit={handlePasswordContinue} className="space-y-4">
           <div>
             <label className={labelClass}>Password</label>
@@ -72,30 +102,32 @@ const SignIn = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 className={`${inputClass} pr-12`}
+                autoFocus
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(0,0%,45%)] hover:text-white"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(0,0%,45%)] hover:text-white transition-colors"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
-          <button type="submit" className={btnClass}>
+          <button type="submit" className={password.trim() ? btnClass : btnDisabledClass} disabled={!password.trim()}>
             Sign in
           </button>
-          <div className="text-center">
-            <a href="#" className="text-sm text-primary hover:underline">Forgot password?</a>
+          <div className="text-center pt-1">
+            <a href="#" className="text-[13px] text-primary hover:underline">Forgot password?</a>
           </div>
         </form>
       </AuthLayout>
     );
   }
 
+  /* ── Email step ── */
   return (
     <AuthLayout>
-      <h1 className="text-2xl font-bold text-white mb-6">Sign in to Coinbase</h1>
+      <h1 className="text-[22px] font-bold text-white mb-6 leading-tight">Sign in to Coinbase</h1>
       <form onSubmit={handleEmailContinue} className="space-y-4">
         <div>
           <label className={labelClass}>Email</label>
@@ -107,7 +139,7 @@ const SignIn = () => {
             className={inputClass}
           />
         </div>
-        <button type="submit" className={btnClass}>
+        <button type="submit" className={email.trim() ? btnClass : btnDisabledClass} disabled={!email.trim()}>
           Continue
         </button>
       </form>
@@ -115,7 +147,7 @@ const SignIn = () => {
       {/* Divider */}
       <div className="flex items-center gap-3 my-6">
         <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
-        <span className="text-xs text-[hsl(0,0%,45%)] font-medium">OR</span>
+        <span className="text-xs text-[hsl(0,0%,40%)] font-medium uppercase tracking-wide">Or</span>
         <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
       </div>
 
@@ -137,12 +169,12 @@ const SignIn = () => {
 
       {/* Footer links */}
       <div className="mt-6 text-center">
-        <p className="text-sm text-[hsl(0,0%,75%)] font-medium">
+        <p className="text-[14px] text-[hsl(0,0%,65%)]">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
+          <Link to="/signup" className="text-primary hover:underline font-medium">Sign up</Link>
         </p>
       </div>
-      <p className="text-xs text-[hsl(0,0%,45%)] text-center mt-4">
+      <p className="text-[12px] text-[hsl(0,0%,40%)] text-center mt-4 leading-relaxed">
         Not your device? Use a private window.<br />
         See our <a href="#" className="text-primary hover:underline">Privacy Policy</a> for more info.
       </p>
