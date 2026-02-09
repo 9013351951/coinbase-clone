@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -57,6 +58,7 @@ const Navbar = () => {
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -79,17 +81,17 @@ const Navbar = () => {
 
   return (
     <nav className="border-b border-border bg-background sticky top-0 z-50">
-      <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between h-16">
+      <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between h-[72px]">
         {/* Logo + Links */}
         <div className="flex items-center gap-8" ref={dropdownRef}>
-          <a href="#" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <svg width="28" height="28" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="512" cy="512" r="512" fill="hsl(221, 100%, 50%)" />
               <path d="M512.147 692C413.028 692 332 611.513 332 512.147C332 412.78 413.028 332 512.147 332C601.544 332 676.147 396.705 690.29 480.098H870C854.856 299.05 702.054 156 512.147 156C316.249 156 156 316.249 156 512.147C156 708.044 316.249 868 512.147 868C702.054 868 854.856 725.243 870 544.195H690.29C676.147 627.295 601.544 692 512.147 692Z" fill="white" />
             </svg>
-          </a>
+          </Link>
 
-          {/* Desktop links — no chevrons */}
+          {/* Desktop links */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <div
@@ -99,7 +101,7 @@ const Navbar = () => {
                 onMouseLeave={handleMouseLeave}
               >
                 <button
-                  className={`px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
+                  className={`px-3 py-2 text-[14px] font-medium transition-colors rounded-lg ${
                     activeDropdown === link ? "text-primary" : "text-foreground hover:text-primary"
                   }`}
                 >
@@ -137,10 +139,17 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="hidden md:flex">
             <Globe className="w-5 h-5" />
           </Button>
-          <Button variant="outline" className="hidden md:flex text-sm font-medium rounded-full px-5 h-9">
+          <Button
+            variant="outline"
+            className="hidden md:flex text-sm font-medium rounded-full px-5 h-9"
+            onClick={() => navigate("/signin")}
+          >
             Sign in
           </Button>
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-5 text-sm font-semibold hidden md:flex h-9">
+          <Button
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-5 text-sm font-semibold hidden md:flex h-9"
+            onClick={() => navigate("/signup")}
+          >
             Sign up
           </Button>
           <Button
@@ -181,8 +190,8 @@ const Navbar = () => {
             </div>
           ))}
           <div className="pt-4 flex flex-col gap-2">
-            <Button variant="outline" className="w-full rounded-full">Sign in</Button>
-            <Button className="w-full bg-primary text-primary-foreground rounded-full">Sign up</Button>
+            <Button variant="outline" className="w-full rounded-full" onClick={() => { navigate("/signin"); setMobileOpen(false); }}>Sign in</Button>
+            <Button className="w-full bg-primary text-primary-foreground rounded-full" onClick={() => { navigate("/signup"); setMobileOpen(false); }}>Sign up</Button>
           </div>
         </div>
       )}

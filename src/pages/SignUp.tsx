@@ -13,6 +13,11 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [verifyCode, setVerifyCode] = useState("");
 
+  const inputClass = "w-full h-12 px-4 rounded-lg border border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white placeholder:text-[hsl(0,0%,40%)] focus:outline-none focus:ring-2 focus:ring-primary text-sm";
+  const labelClass = "block text-sm font-medium text-[hsl(0,0%,85%)] mb-1.5";
+  const btnClass = "w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-colors";
+  const btnDisabledClass = "w-full h-12 rounded-full bg-primary/30 text-primary-foreground/50 font-semibold text-sm cursor-not-allowed";
+
   const handleEmailContinue = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim()) setStep("details");
@@ -26,13 +31,13 @@ const SignUp = () => {
   if (step === "verify") {
     return (
       <AuthLayout>
-        <h1 className="text-2xl font-bold text-foreground mb-2">Verify your email</h1>
-        <p className="text-sm text-muted-foreground mb-6">
-          We sent a verification code to <span className="font-medium text-foreground">{email}</span>. Please check your inbox and enter the code below.
+        <h1 className="text-2xl font-bold text-white mb-2">Verify your email</h1>
+        <p className="text-sm text-[hsl(0,0%,55%)] mb-6">
+          We sent a verification code to <span className="font-medium text-white">{email}</span>. Please check your inbox and enter the code below.
         </p>
         <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Verification code</label>
+            <label className={labelClass}>Verification code</label>
             <input
               type="text"
               inputMode="numeric"
@@ -40,14 +45,10 @@ const SignUp = () => {
               value={verifyCode}
               onChange={(e) => setVerifyCode(e.target.value)}
               placeholder="Enter your code"
-              className="w-full h-12 px-4 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+              className={inputClass}
             />
           </div>
-          <button
-            type="submit"
-            className="w-full h-12 rounded-full bg-primary/40 text-primary-foreground font-medium text-sm cursor-not-allowed"
-            disabled
-          >
+          <button type="submit" className={btnDisabledClass} disabled>
             Verify
           </button>
           <div className="text-center">
@@ -61,54 +62,51 @@ const SignUp = () => {
   if (step === "details") {
     return (
       <AuthLayout>
-        <h1 className="text-2xl font-bold text-foreground mb-1">Create your account</h1>
-        <p className="text-sm text-muted-foreground mb-6">{email}</p>
+        <h1 className="text-2xl font-bold text-white mb-1">Create your account</h1>
+        <p className="text-sm text-[hsl(0,0%,55%)] mb-6">{email}</p>
         <form onSubmit={handleDetailsContinue} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">First name</label>
+              <label className={labelClass}>First name</label>
               <input
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="First name"
-                className="w-full h-12 px-4 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                className={inputClass}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">Last name</label>
+              <label className={labelClass}>Last name</label>
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Last name"
-                className="w-full h-12 px-4 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                className={inputClass}
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Password</label>
+            <label className={labelClass}>Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
-                className="w-full h-12 px-4 pr-12 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                className={`${inputClass} pr-12`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(0,0%,45%)] hover:text-white"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
-          <button
-            type="submit"
-            className="w-full h-12 rounded-full bg-primary/40 hover:bg-primary text-primary-foreground font-medium text-sm transition-colors"
-          >
+          <button type="submit" className={btnClass}>
             Create account
           </button>
         </form>
@@ -118,34 +116,31 @@ const SignUp = () => {
 
   return (
     <AuthLayout>
-      <h1 className="text-2xl font-bold text-foreground mb-2">Create your account</h1>
-      <p className="text-sm text-muted-foreground mb-6">
+      <h1 className="text-2xl font-bold text-white mb-2">Create your account</h1>
+      <p className="text-sm text-[hsl(0,0%,55%)] mb-6">
         Access all that Coinbase has to offer with a single account.
       </p>
       <form onSubmit={handleEmailContinue} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+          <label className={labelClass}>Email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Your email address"
-            className="w-full h-12 px-4 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+            className={inputClass}
           />
         </div>
-        <button
-          type="submit"
-          className="w-full h-12 rounded-full bg-primary/40 hover:bg-primary text-primary-foreground font-medium text-sm transition-colors"
-        >
+        <button type="submit" className={btnClass}>
           Continue
         </button>
       </form>
 
       {/* Divider */}
       <div className="flex items-center gap-3 my-6">
-        <div className="flex-1 h-px bg-border" />
-        <span className="text-xs text-muted-foreground font-medium">OR</span>
-        <div className="flex-1 h-px bg-border" />
+        <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
+        <span className="text-xs text-[hsl(0,0%,45%)] font-medium">OR</span>
+        <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
       </div>
 
       {/* Social buttons */}
@@ -155,19 +150,19 @@ const SignUp = () => {
           label="Sign up with Google"
         />
         <SocialButton
-          icon={<svg width="18" height="18" viewBox="0 0 18 22" fill="currentColor"><path d="M14.94 0c.12 1.27-.37 2.53-1.13 3.45-.76.92-2.01 1.64-3.23 1.54-.14-1.24.42-2.54 1.14-3.35C12.49.72 13.81.08 14.94 0zM17.89 14.56c-.42.98-.62 1.42-1.16 2.28-.75 1.2-1.81 2.7-3.12 2.71-1.17.02-1.46-.76-3.04-.75-1.58.01-1.9.77-3.07.76-1.31-.02-2.31-1.37-3.06-2.57C2.56 13.36 2.3 9.48 3.76 7.4c1.02-1.46 2.64-2.32 4.15-2.32 1.42 0 2.31.77 3.48.77 1.13 0 1.82-.77 3.45-.77 1.34 0 2.78.73 3.8 1.99-3.34 1.83-2.8 6.6.25 7.49z"/></svg>}
+          icon={<svg width="18" height="18" viewBox="0 0 18 22" fill="white"><path d="M14.94 0c.12 1.27-.37 2.53-1.13 3.45-.76.92-2.01 1.64-3.23 1.54-.14-1.24.42-2.54 1.14-3.35C12.49.72 13.81.08 14.94 0zM17.89 14.56c-.42.98-.62 1.42-1.16 2.28-.75 1.2-1.81 2.7-3.12 2.71-1.17.02-1.46-.76-3.04-.75-1.58.01-1.9.77-3.07.76-1.31-.02-2.31-1.37-3.06-2.57C2.56 13.36 2.3 9.48 3.76 7.4c1.02-1.46 2.64-2.32 4.15-2.32 1.42 0 2.31.77 3.48.77 1.13 0 1.82-.77 3.45-.77 1.34 0 2.78.73 3.8 1.99-3.34 1.83-2.8 6.6.25 7.49z"/></svg>}
           label="Sign up with Apple"
         />
       </div>
 
       {/* Footer links */}
       <div className="mt-6 text-center">
-        <p className="text-sm text-foreground font-medium">
+        <p className="text-sm text-[hsl(0,0%,75%)] font-medium">
           Already have an account?{" "}
           <Link to="/signin" className="text-primary hover:underline">Sign in</Link>
         </p>
       </div>
-      <p className="text-xs text-muted-foreground text-center mt-4">
+      <p className="text-xs text-[hsl(0,0%,45%)] text-center mt-4">
         By creating an account you certify that you are over the age of 18 and agree to our{" "}
         <a href="#" className="text-primary hover:underline">Privacy Policy</a> and{" "}
         <a href="#" className="text-primary hover:underline">Cookie Policy</a>.
