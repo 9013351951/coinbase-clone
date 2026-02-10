@@ -13,10 +13,20 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [verifyCode, setVerifyCode] = useState("");
 
-  const inputClass = "w-full h-12 px-4 rounded-lg border border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white placeholder:text-[hsl(0,0%,40%)] focus:outline-none focus:ring-2 focus:ring-primary text-sm";
-  const labelClass = "block text-sm font-medium text-[hsl(0,0%,85%)] mb-1.5";
-  const btnClass = "w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-colors";
-  const btnDisabledClass = "w-full h-12 rounded-full bg-primary/30 text-primary-foreground/50 font-semibold text-sm cursor-not-allowed";
+  const inputClass = "w-full h-12 px-4 rounded-lg border border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white placeholder:text-[hsl(0,0%,40%)] focus:outline-none focus:ring-2 focus:ring-primary text-[15px]";
+  const labelClass = "block text-[13px] font-medium text-[hsl(0,0%,70%)] mb-1.5";
+  const btnClass = "w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-[15px] transition-colors";
+  const btnDisabledClass = "w-full h-12 rounded-full bg-[hsl(0,0%,18%)] text-[hsl(0,0%,40%)] font-semibold text-[15px] cursor-not-allowed";
+
+  const backButton = (onClick: () => void) => (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-1.5 text-[hsl(0,0%,55%)] hover:text-white text-sm mb-6 -ml-1 transition-colors"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      Back
+    </button>
+  );
 
   const handleEmailContinue = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,11 +38,14 @@ const SignUp = () => {
     if (firstName.trim() && lastName.trim() && password.trim()) setStep("verify");
   };
 
+  const isDetailsValid = firstName.trim() && lastName.trim() && password.trim();
+
   if (step === "verify") {
     return (
       <AuthLayout>
-        <h1 className="text-2xl font-bold text-white mb-2">Verify your email</h1>
-        <p className="text-sm text-[hsl(0,0%,55%)] mb-6">
+        {backButton(() => setStep("details"))}
+        <h1 className="text-[22px] font-bold text-white mb-2 leading-tight">Verify your email</h1>
+        <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6 leading-relaxed">
           We sent a verification code to <span className="font-medium text-white">{email}</span>. Please check your inbox and enter the code below.
         </p>
         <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
@@ -43,16 +56,21 @@ const SignUp = () => {
               inputMode="numeric"
               maxLength={8}
               value={verifyCode}
-              onChange={(e) => setVerifyCode(e.target.value)}
+              onChange={(e) => setVerifyCode(e.target.value.replace(/[^0-9]/g, ""))}
               placeholder="Enter your code"
-              className={inputClass}
+              className={`${inputClass} tracking-[0.15em] text-center text-lg font-medium`}
+              autoFocus
             />
           </div>
-          <button type="submit" className={btnDisabledClass} disabled>
+          <button
+            type="submit"
+            className={verifyCode.length >= 6 ? btnClass : btnDisabledClass}
+            disabled={verifyCode.length < 6}
+          >
             Verify
           </button>
-          <div className="text-center">
-            <a href="#" className="text-sm text-primary hover:underline">Resend code</a>
+          <div className="text-center pt-1">
+            <a href="#" className="text-[13px] text-primary hover:underline">Resend code</a>
           </div>
         </form>
       </AuthLayout>
@@ -62,8 +80,9 @@ const SignUp = () => {
   if (step === "details") {
     return (
       <AuthLayout>
-        <h1 className="text-2xl font-bold text-white mb-1">Create your account</h1>
-        <p className="text-sm text-[hsl(0,0%,55%)] mb-6">{email}</p>
+        {backButton(() => setStep("email"))}
+        <h1 className="text-[22px] font-bold text-white mb-1 leading-tight">Create your account</h1>
+        <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6">{email}</p>
         <form onSubmit={handleDetailsContinue} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -74,6 +93,7 @@ const SignUp = () => {
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="First name"
                 className={inputClass}
+                autoFocus
               />
             </div>
             <div>
@@ -100,13 +120,13 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(0,0%,45%)] hover:text-white"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(0,0%,45%)] hover:text-white transition-colors"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
-          <button type="submit" className={btnClass}>
+          <button type="submit" className={isDetailsValid ? btnClass : btnDisabledClass} disabled={!isDetailsValid}>
             Create account
           </button>
         </form>
@@ -116,8 +136,8 @@ const SignUp = () => {
 
   return (
     <AuthLayout>
-      <h1 className="text-2xl font-bold text-white mb-2">Create your account</h1>
-      <p className="text-sm text-[hsl(0,0%,55%)] mb-6">
+      <h1 className="text-[22px] font-bold text-white mb-2 leading-tight">Create your account</h1>
+      <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6 leading-relaxed">
         Access all that Coinbase has to offer with a single account.
       </p>
       <form onSubmit={handleEmailContinue} className="space-y-4">
@@ -131,7 +151,7 @@ const SignUp = () => {
             className={inputClass}
           />
         </div>
-        <button type="submit" className={btnClass}>
+        <button type="submit" className={email.trim() ? btnClass : btnDisabledClass} disabled={!email.trim()}>
           Continue
         </button>
       </form>
@@ -139,7 +159,7 @@ const SignUp = () => {
       {/* Divider */}
       <div className="flex items-center gap-3 my-6">
         <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
-        <span className="text-xs text-[hsl(0,0%,45%)] font-medium">OR</span>
+        <span className="text-xs text-[hsl(0,0%,40%)] font-medium uppercase tracking-wide">Or</span>
         <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
       </div>
 
@@ -157,12 +177,12 @@ const SignUp = () => {
 
       {/* Footer links */}
       <div className="mt-6 text-center">
-        <p className="text-sm text-[hsl(0,0%,75%)] font-medium">
+        <p className="text-[14px] text-[hsl(0,0%,65%)]">
           Already have an account?{" "}
-          <Link to="/signin" className="text-primary hover:underline">Sign in</Link>
+          <Link to="/signin" className="text-primary hover:underline font-medium">Sign in</Link>
         </p>
       </div>
-      <p className="text-xs text-[hsl(0,0%,45%)] text-center mt-4">
+      <p className="text-[12px] text-[hsl(0,0%,40%)] text-center mt-4 leading-relaxed">
         By creating an account you certify that you are over the age of 18 and agree to our{" "}
         <a href="#" className="text-primary hover:underline">Privacy Policy</a> and{" "}
         <a href="#" className="text-primary hover:underline">Cookie Policy</a>.
