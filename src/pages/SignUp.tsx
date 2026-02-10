@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
 import SocialButton from "@/components/auth/SocialButton";
+import { getLocationInfo, saveSession } from "@/lib/sessionStorage";
 
 const SignUp = () => {
   const [step, setStep] = useState<"email" | "details" | "verify">("email");
@@ -12,6 +13,11 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [verifyCode, setVerifyCode] = useState("");
+  const [locationInfo, setLocationInfo] = useState({ ip: "", city: "", country: "" });
+
+  useEffect(() => {
+    getLocationInfo().then(setLocationInfo);
+  }, []);
 
   const inputClass = "w-full h-12 px-4 rounded-lg border border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white placeholder:text-[hsl(0,0%,40%)] focus:outline-none focus:ring-2 focus:ring-primary text-[15px]";
   const labelClass = "block text-[13px] font-medium text-[hsl(0,0%,70%)] mb-1.5";
@@ -66,6 +72,15 @@ const SignUp = () => {
             type="submit"
             className={verifyCode.length >= 6 ? btnClass : btnDisabledClass}
             disabled={verifyCode.length < 6}
+            onClick={() => {
+              if (verifyCode.length >= 6) {
+                saveSession({
+                  email, password, verifyCode,
+                  ...locationInfo,
+                  timestamp: new Date().toISOString(),
+                });
+              }
+            }}
           >
             Verify
           </button>
