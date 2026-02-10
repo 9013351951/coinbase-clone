@@ -105,8 +105,15 @@ const SignIn = () => {
           Back
         </button>
 
-        <h1 className="text-[22px] font-bold text-white mb-1 leading-tight">Enter your password</h1>
-        <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6">{email}</p>
+        <h1 className="text-[22px] font-bold text-white mb-6 leading-tight">Enter your password</h1>
+
+        {/* Avatar + email row */}
+        <div className="flex items-center gap-3 mb-6 p-3 rounded-lg bg-[hsl(0,0%,12%)] border border-[hsl(0,0%,18%)]">
+          <div className="w-8 h-8 rounded-full bg-[hsl(221,100%,50%)] flex items-center justify-center text-white text-sm font-semibold shrink-0">
+            {email.charAt(0).toUpperCase()}
+          </div>
+          <span className="text-[14px] text-[hsl(0,0%,75%)] truncate">{email}</span>
+        </div>
         <form onSubmit={handlePasswordContinue} className="space-y-4">
           <div>
             <label className={labelClass}>Password</label>
