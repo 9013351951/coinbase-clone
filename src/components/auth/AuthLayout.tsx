@@ -6,7 +6,7 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="min-h-screen bg-[hsl(0,0%,3%)] flex flex-col">
+    <div className="min-h-screen bg-[hsl(220,13%,10%)] flex flex-col">
       {/* Header with logo */}
       <header className="px-8 py-6">
         <Link to="/">
@@ -19,20 +19,20 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         </Link>
       </header>
 
-      {/* Center card */}
+      {/* Center content — NO card container, just centered content */}
       <main className="flex-1 flex items-start justify-center pt-4 px-4">
-        <div className="w-full max-w-[420px] border border-[hsl(0,0%,18%)] rounded-xl bg-[hsl(0,0%,8%)] p-8 sm:p-10">
+        <div className="w-full max-w-[550px] px-2">
           {children}
         </div>
       </main>
 
-      {/* Cookie banner */}
-      <footer className="border-t border-[hsl(0,0%,15%)] bg-[hsl(0,0%,5%)] px-6 py-4 flex items-center justify-between gap-4 text-sm text-[hsl(0,0%,60%)]">
+      {/* Cookie banner — matches real Coinbase: simple bar with outlined Dismiss */}
+      <footer className="bg-[hsl(220,13%,10%)] px-6 py-4 flex items-center justify-between gap-6 text-[13px] text-[hsl(0,0%,60%)]">
         <p>
           We use strictly necessary cookies to enable essential functions, such as security and authentication. For more information, see our{" "}
           <a href="#" className="text-primary hover:underline">Cookie Policy</a>.
         </p>
-        <button className="shrink-0 bg-primary text-primary-foreground px-5 py-2 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors">
+        <button className="shrink-0 border border-primary text-primary px-5 py-2 rounded-full text-sm font-medium hover:bg-primary/10 transition-colors">
           Dismiss
         </button>
       </footer>
