@@ -8,10 +8,10 @@ const SocialButton = ({ icon, label, onClick }: SocialButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center h-12 rounded-full border border-[hsl(0,0%,22%)] bg-transparent hover:bg-[hsl(0,0%,12%)] transition-colors text-sm font-medium text-white"
+      className="w-full flex items-center h-14 rounded-full border border-[hsl(222,40%,25%)] bg-[hsl(222,47%,16%)] hover:bg-[hsl(222,47%,20%)] transition-colors text-[15px] font-medium text-white"
     >
-      <span className="w-14 flex items-center justify-center">{icon}</span>
-      <span className="flex-1 text-center pr-14">{label}</span>
+      <span className="w-16 flex items-center justify-center">{icon}</span>
+      <span className="flex-1 text-center pr-16">{label}</span>
     </button>
   );
 };

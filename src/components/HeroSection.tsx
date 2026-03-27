@@ -37,10 +37,10 @@ const HeroSection = () => {
           className="flex-1 max-w-xl"
         >
           <h1 className="text-[2.75rem] md:text-[3.25rem] lg:text-[3.75rem] font-black leading-[1.05] tracking-[-0.02em] text-foreground">
-            Trade anything, anytime, anywhere.
+            The future of finance is here.
           </h1>
           <p className="mt-6 text-[18px] text-muted-foreground leading-relaxed">
-            Trade crypto, stocks,¹ and more on a platform you can trust.
+            Trade crypto, stocks,² and more on a platform you can trust.
           </p>
           <p className="mt-2 text-[16px] text-muted-foreground">
             Sign up and get up to $2,000 in crypto.²

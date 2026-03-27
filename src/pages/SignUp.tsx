@@ -19,10 +19,10 @@ const SignUp = () => {
     getLocationInfo().then(setLocationInfo);
   }, []);
 
-  const inputClass = "w-full h-12 px-4 rounded-lg border border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white placeholder:text-[hsl(0,0%,40%)] focus:outline-none focus:ring-2 focus:ring-primary text-[15px]";
-  const labelClass = "block text-[13px] font-medium text-[hsl(0,0%,70%)] mb-1.5";
-  const btnClass = "w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-[15px] transition-colors";
-  const btnDisabledClass = "w-full h-12 rounded-full bg-[hsl(0,0%,18%)] text-[hsl(0,0%,40%)] font-semibold text-[15px] cursor-not-allowed";
+  const inputClass = "w-full h-14 px-4 rounded-lg border border-[hsl(222,40%,25%)] bg-[hsl(222,47%,16%)] text-white placeholder:text-[hsl(220,20%,45%)] focus:outline-none focus:ring-2 focus:ring-primary text-[15px]";
+  const labelClass = "block text-[14px] font-medium text-white mb-2";
+  const btnClass = "w-full h-14 rounded-full bg-[hsl(222,47%,20%)] hover:bg-[hsl(222,47%,25%)] text-white font-semibold text-[15px] transition-colors";
+  const btnDisabledClass = "w-full h-14 rounded-full bg-[hsl(222,47%,14%)] text-[hsl(220,20%,40%)] font-semibold text-[15px] cursor-not-allowed";
 
   const backButton = (onClick: () => void) => (
     <button
@@ -50,11 +50,11 @@ const SignUp = () => {
     return (
       <AuthLayout>
         {backButton(() => setStep("details"))}
-        <h1 className="text-[22px] font-bold text-white mb-2 leading-tight">Verify your email</h1>
-        <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6 leading-relaxed">
+        <h1 className="text-[26px] font-bold text-white mb-2 leading-tight">Verify your email</h1>
+        <p className="text-[15px] text-[hsl(0,0%,55%)] mb-8 leading-relaxed">
           We sent a verification code to <span className="font-medium text-white">{email}</span>. Please check your inbox and enter the code below.
         </p>
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
           <div>
             <label className={labelClass}>Verification code</label>
             <input
@@ -96,9 +96,9 @@ const SignUp = () => {
     return (
       <AuthLayout>
         {backButton(() => setStep("email"))}
-        <h1 className="text-[22px] font-bold text-white mb-1 leading-tight">Create your account</h1>
+        <h1 className="text-[26px] font-bold text-white mb-1 leading-tight">Create your account</h1>
         <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6">{email}</p>
-        <form onSubmit={handleDetailsContinue} className="space-y-4">
+        <form onSubmit={handleDetailsContinue} className="space-y-5">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>First name</label>
@@ -135,7 +135,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(0,0%,45%)] hover:text-white transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[hsl(220,20%,45%)] hover:text-white transition-colors"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -151,11 +151,11 @@ const SignUp = () => {
 
   return (
     <AuthLayout>
-      <h1 className="text-[22px] font-bold text-white mb-2 leading-tight">Create your account</h1>
-      <p className="text-[14px] text-[hsl(0,0%,55%)] mb-6 leading-relaxed">
+      <h1 className="text-[28px] font-bold text-white mb-2 leading-tight">Create your account</h1>
+      <p className="text-[15px] text-[hsl(0,0%,55%)] mb-8 leading-relaxed">
         Access all that Coinbase has to offer with a single account.
       </p>
-      <form onSubmit={handleEmailContinue} className="space-y-4">
+      <form onSubmit={handleEmailContinue} className="space-y-5">
         <div>
           <label className={labelClass}>Email</label>
           <input
@@ -172,10 +172,10 @@ const SignUp = () => {
       </form>
 
       {/* Divider */}
-      <div className="flex items-center gap-3 my-6">
-        <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
-        <span className="text-xs text-[hsl(0,0%,40%)] font-medium uppercase tracking-wide">Or</span>
-        <div className="flex-1 h-px bg-[hsl(0,0%,18%)]" />
+      <div className="flex items-center gap-3 my-7">
+        <div className="flex-1 h-px bg-[hsl(222,40%,25%)]" />
+        <span className="text-xs text-[hsl(220,20%,45%)] font-medium uppercase tracking-wide">Or</span>
+        <div className="flex-1 h-px bg-[hsl(222,40%,25%)]" />
       </div>
 
       {/* Social buttons */}
@@ -190,18 +190,13 @@ const SignUp = () => {
         />
       </div>
 
-      {/* Footer links */}
-      <div className="mt-6 text-center">
+      {/* Footer link — NO privacy text on initial step */}
+      <div className="mt-8 text-center">
         <p className="text-[14px] text-[hsl(0,0%,65%)]">
           Already have an account?{" "}
           <Link to="/signin" className="text-primary hover:underline font-medium">Sign in</Link>
         </p>
       </div>
-      <p className="text-[12px] text-[hsl(0,0%,40%)] text-center mt-4 leading-relaxed">
-        By creating an account you certify that you are over the age of 18 and agree to our{" "}
-        <a href="#" className="text-primary hover:underline">Privacy Policy</a> and{" "}
-        <a href="#" className="text-primary hover:underline">Cookie Policy</a>.
-      </p>
     </AuthLayout>
   );
 };
