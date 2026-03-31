@@ -20,8 +20,8 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
       </header>
 
       {/* Center content — NO card container, just centered content */}
-      <main className="flex-1 flex items-start justify-center pt-4 px-4">
-        <div className="w-full max-w-[550px] px-2">
+      <main className="flex-1 flex items-center justify-center px-4">
+        <div className="w-full max-w-[360px]">
           {children}
         </div>
       </main>
@@ -32,7 +32,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
           We use strictly necessary cookies to enable essential functions, such as security and authentication. For more information, see our{" "}
           <a href="#" className="text-primary hover:underline">Cookie Policy</a>.
         </p>
-        <button className="shrink-0 border border-primary text-primary px-5 py-2 rounded-full text-sm font-medium hover:bg-primary/10 transition-colors">
+        <button className="shrink-0 bg-primary text-primary-foreground px-5 py-2 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors">
           Dismiss
         </button>
       </footer>

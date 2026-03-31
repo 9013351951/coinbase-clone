@@ -12,28 +12,11 @@ const HeroSection = () => {
   return (
     <section className="max-w-[1440px] mx-auto px-6 py-14 lg:py-24">
       <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
-        {/* Phone mockup */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="flex-1 flex justify-center"
-        >
-          <div className="relative w-full max-w-[520px]">
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-primary/5 rounded-3xl -m-4" />
-            <img
-              src={heroPhone}
-              alt="Coinbase trading app showing portfolio with crypto, stocks, and derivatives"
-              className="relative w-full rounded-2xl"
-            />
-          </div>
-        </motion.div>
-
-        {/* Text content */}
+        {/* Text content — LEFT side */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          transition={{ duration: 0.7 }}
           className="flex-1 max-w-xl"
         >
           <h1 className="text-[2.75rem] md:text-[3.25rem] lg:text-[3.75rem] font-black leading-[1.05] tracking-[-0.02em] text-foreground">
@@ -60,6 +43,23 @@ const HeroSection = () => {
             >
               Sign up
             </Button>
+          </div>
+        </motion.div>
+
+        {/* Phone mockup — RIGHT side */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+          className="flex-1 flex justify-center"
+        >
+          <div className="relative w-full max-w-[520px]">
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-primary/5 rounded-3xl -m-4" />
+            <img
+              src={heroPhone}
+              alt="Coinbase trading app showing portfolio with crypto, stocks, and derivatives"
+              className="relative w-full rounded-2xl"
+            />
           </div>
         </motion.div>
       </div>
