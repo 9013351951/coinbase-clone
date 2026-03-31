@@ -20,8 +20,8 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
       </header>
 
       {/* Center content — NO card container, just centered content */}
-      <main className="flex-1 flex items-start justify-center pt-4 px-4">
-        <div className="w-full max-w-[550px] px-2">
+      <main className="flex-1 flex items-center justify-center px-4">
+        <div className="w-full max-w-[360px]">
           {children}
         </div>
       </main>
