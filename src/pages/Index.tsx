@@ -25,6 +25,7 @@ const Index = () => {
         <CTASection />
       </main>
       <Footer />
+      <HomeCookieBanner />
     </div>
   );
 };
