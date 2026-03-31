@@ -8,6 +8,7 @@ import ProductShowcase from "@/components/ProductShowcase";
 import BottomCards from "@/components/BottomCards";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import HomeCookieBanner from "@/components/HomeCookieBanner";
 
 const Index = () => {
   return (
